@@ -1,9 +1,7 @@
 horizontal-calendar-widget
 ==========================
 
-A simple Übersicht Widget. This will enable a sleek Dateline-like horizontal calendar on your desktop to make it more useful.
-
-A simple [Übersicht](http://tracesof.net/uebersicht/) Widget. This will enable a classy simple themeable analog clock on your desktop to make it more sleek and useful.
+A simple [Übersicht](http://tracesof.net/uebersicht/) Widget. This will enable a sleek Dateline-like horizontal calendar on your desktop to make it more useful.
 
 ## Screenshot
 
