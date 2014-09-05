@@ -69,7 +69,7 @@ style: "                              \n\
     background: rgba(#f77, .5)        \n\
                                       \n\
   .midline .off-today                 \n\
-    background: rgba(#f00, .5)        \n\
+    background: rgba(#cc0, .7)        \n\
                                       \n\
   .offday, .off-today                 \n\
     color: rgba(#f77, 1)              \n\

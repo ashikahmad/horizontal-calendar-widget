@@ -7,7 +7,7 @@ A simple [Übersicht](http://tracesof.net/uebersicht/) Widget. This will enable 
 
 ## Screenshot
 
-![Analog clock widget for übersicht](./Screenshot.png)
+![Analog clock widget for übersicht](./screenshot.png)
 
 ## Download
 
