@@ -1,4 +1,8 @@
 command: "echo Hello World!",
+
+dayNames: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+offdayIndices: [5, 6], // Fr, Sa
  
 refreshFrequency: 5000,
 
@@ -76,10 +80,6 @@ style: "                              \n\
 ",
 
 update: function (output, domEl) {
-  var days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
-  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  var offdayIndices = [5, 6];
-  
   var date = new Date(), y = date.getFullYear(), m = date.getMonth();
   var today = date.getDate();
   var firstWeekDay = new Date(y, m, 1).getDay();
@@ -88,18 +88,18 @@ update: function (output, domEl) {
 
   for (var i = 1, w = firstWeekDay; i <= lastDate; i++, w++) {
     w %= 7;
-    var isToday = i == today, isOffday = offdayIndices.indexOf(w) != -1;
+    var isToday = (i == today), isOffday = this.offdayIndices.indexOf(w) != -1;
     var className = "ordinary";
     if(isToday && isOffday) className = "off-today";
     else if(isToday) className = "today";
     else if(isOffday) className = "offday";
 
-    weekdays += "<td class=\""+className+"\">" + days[w] + "</td>";
+    weekdays += "<td class=\""+className+"\">" + this.dayNames[w] + "</td>";
     midlines += "<td class=\""+className+"\"></td>";
     dates += "<td class=\""+className+"\">" + i + "</td>";
   };
 
-  $(domEl).find(".title").html(months[date.getMonth()]+" "+date.getFullYear());
+  $(domEl).find(".title").html(this.monthNames[date.getMonth()]+" "+date.getFullYear());
   $(domEl).find(".weekday").html(weekdays);
   $(domEl).find(".midline").html(midlines);
   $(domEl).find(".date").html(dates);
