@@ -1,10 +1,12 @@
 command: "echo Hello World!",
+// command: 'date -v1d +"%e"; date -v1d -v+1m -v-1d +"%d"; date +"%d%n%m%n%Y"',
 
 dayNames: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
 monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 offdayIndices: [5, 6], // Fr, Sa
  
 refreshFrequency: 5000,
+displayedDate: null,
 
 render: function () {
   return "<div class=\"cal-container\">\
@@ -80,15 +82,27 @@ style: "                              \n\
 ",
 
 update: function (output, domEl) {
-  var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-  var today = date.getDate();
+  // var date = output.split("\n"), firstWeekDay = date[0], lastDate = date[1], today = date[2], m = date[3]-1, y = date[4];
+  
+  // // DON'T MANUPULATE DOM IF NOT NEEDED
+  // if(this.displayedDate != null && this.displayedDate == output) return;
+  // else this.displayedDate = output;
+
+  var date = new Date(), y = date.getFullYear(), m = date.getMonth(), today = date.getDate();
+  
+  // DON'T MANUPULATE DOM IF NOT NEEDED
+  var newDate = [today, m, y].join("/");
+  if(this.displayedDate != null && this.displayedDate == newDate) return;
+  else this.displayedDate = newDate;
+
   var firstWeekDay = new Date(y, m, 1).getDay();
   var lastDate = new Date(y, m + 1, 0).getDate();
+  
   var weekdays = "", midlines = "", dates = "";
 
   for (var i = 1, w = firstWeekDay; i <= lastDate; i++, w++) {
     w %= 7;
-    var isToday = (i == today), isOffday = this.offdayIndices.indexOf(w) != -1;
+    var isToday = (i == today), isOffday = (this.offdayIndices.indexOf(w) != -1);
     var className = "ordinary";
     if(isToday && isOffday) className = "off-today";
     else if(isToday) className = "today";
@@ -99,7 +113,7 @@ update: function (output, domEl) {
     dates += "<td class=\""+className+"\">" + i + "</td>";
   };
 
-  $(domEl).find(".title").html(this.monthNames[date.getMonth()]+" "+date.getFullYear());
+  $(domEl).find(".title").html(this.monthNames[m]+" "+y);
   $(domEl).find(".weekday").html(weekdays);
   $(domEl).find(".midline").html(midlines);
   $(domEl).find(".date").html(dates);
