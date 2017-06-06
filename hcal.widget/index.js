@@ -8,15 +8,15 @@ offdayIndices: [5, 6], // Fr, Sa
 refreshFrequency: 5000,
 displayedDate: null,
 
-render: function () {
-  return "<div class=\"cal-container\">\
-  <div class=\"title\"></div>\
-  <table>\
-  <tr class=\"weekday\"></tr>\
-  <tr class=\"midline\"></tr>\
-  <tr class=\"date\"></tr>\
-  </table>\
-  </div>";
+render: function (output) {
+  return '<div class="cal-container">'
+  + '<div class=\"title\"></div>'
+  + '<table>'
+  + '<tr class=\"weekday\"></tr>'
+  + '<tr class=\"midline\"></tr>'
+  + '<tr class=\"date\"></tr>'
+  + '</table>'
+  + '</div>';
 },
  
 style: "                              \n\
