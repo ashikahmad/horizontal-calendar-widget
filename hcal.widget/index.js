@@ -6,204 +6,215 @@
 */
 
 _: (() => this.options = {
-        lat: '52.01',
-        long: '11.46',
-        country: 'usa',
-        city: 'miami'
-    })(),
+    lat: '41.01',
+    long: '29.21',
+    country: 'turkey',
+    city: 'istanbul'
+  })(),
 
-    dayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    offdayIndices: [0, 6], // Saturday & Sunday
+  dayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+  monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+  offdayIndices: [0, 6], // Saturday & Sunday
 
-    refreshFrequency: '1d',
-    displayedDate: null,
+  refreshFrequency: 10000,
+  displayedDate: null,
 
-    render: function () {
-        return "<style>@-webkit-keyframes pulse{0%{opacity:0}100%{opacity:1}}</style>\
-      <div class=\"cal-container\">\
-  <div class=\"title\"></div>\
-  <table>\
-  <tr class=\"weekday\"></tr>\
-  <tr class=\"midline\"></tr>\
-  <tr class=\"date\"></tr>\
-  <tr class=\"status_top\"></tr>\
-  <tr class=\"status_bottom\"></tr>\
-  </table>\
-  </div>";
-    },
+  render: function (output) {
+    return '<style>@-webkit-keyframes pulse{0%{opacity:0}100%{opacity:1}}</style>' +
+    '<div class="cal-container">' +
+      '<div class=\"title\"></div>' +
+      '<table>' +
+      '<tr class=\"weekday\"></tr>' +
+      '<tr class=\"midline\"></tr>' +
+      '<tr class=\"date\"></tr>' +
+      '<tr class=\"status_top\"></tr>' +
+      '<tr class=\"status_bottom\"></tr>' +
+      '</table>' +
+      '</div>';
+  },
 
-    style: "                              \n\
-  bottom: 10px                        \n\
-  right: 30px                         \n\
-  left: 29.5% \n\
-  font-family: -apple-system          \n\
-  font-size: 13px                     \n\
-  font-weight: 500                    \n\
-  color: #fff                         \n\
-                                      \n\
-  .cal-container                      \n\
-    border-radius: 10px               \n\
-    background: rgba(#000, 0)         \n\
-    padding: 0px                      \n\
-                                      \n\
-  .title                              \n\
-    color: rgba(#fff, .3)             \n\
-    font-size: 20px                   \n\
-    font-weight: 500                  \n\
-    padding-bottom: 14px              \n\
-    text-transform uppercase          \n\
-    text-align: right				  \n\
-                                      \n\
-  table                               \n\
-    border-collapse: collapse         \n\
-    table-layout: fixed 			  \n\
-    width: 100% 					  \n\
-                                      \n\
-  td                                  \n\
-    text-align: center                \n\
-                                      \n\
-  .weekday td                         \n\
-    padding-top: 6px                  \n\
-    padding-bottom: 6px				  \n\
-                                      \n\
-  .date td                            \n\
-    padding-top: 6px                  \n\
-    padding-bottom: 6px               \n\
-                                      \n\
-  .today, .off-today                  \n\
-    background: rgba(#fff, 0.2)       \n\
-                                      \n\
-  .weekday .today,                    \n\
-  .weekday .off-today                 \n\
-    border-radius: 3px 3px 0 0        \n\
-    padding-bottom: 6px 			  \n\
-                                      \n\
-  .date .today,                       \n\
-  .date .off-today                    \n\
-    border-radius: 0 0 3px 3px        \n\
-    padding-top: 6px 				  \n\
-                                      \n\
-  .midline                            \n\
-    height: 3px                       \n\
-    background: rgba(#fff, .5)        \n\
-                                      \n\
-  .midline .today                     \n\
-    background: rgba(#0bf, .8)        \n\
-                                      \n\
-  .midline .offday                    \n\
-    background: rgba(#f77, .5)        \n\
-                                      \n\
-  .midline .off-today                 \n\
-    background: rgba(#fc3, .8)        \n\
-                                      \n\
-  .offday, .off-today                 \n\
-    color: rgba(#f77, 1)              \n\
-                                      \n\
-  .status_top                         \n\
-    height: 3px                       \n\
-    background: rgba(0, 0, 0, 0)      \n\
-                                      \n\
-  .status_top .open                   \n\
-    background: rgba(#5EEA8E, .8)     \n\
-    animation:                        \n\
-    pulse 2s alternate infinite       \n\
-    border-radius: 5px                \n\
-                                      \n\
-  .status_bottom                      \n\
-    height: 3px                       \n\
-    background: rgba(0, 0, 0, 0)      \n\
-    animation:                        \n\
-    pulse 2s alternate infinite       \n\
-    border-radius: 5px                \n\
-                                      \n\
-  .First                              \n\
-   background: linear-gradient(90deg, black, black 50%, white)  \n\
-   border-radius: 5px                 \n\
-                                      \n\
-  .Full                               \n\
-   background: linear-gradient(90deg, white, white)             \n\
-   border-radius: 5px                 \n\
-                                      \n\
-  .Third                              \n\
-   background: linear-gradient(-90deg, black, black 50%, white) \n\
-   border-radius: 5px                 \n\
-                                      \n\
-  .New                                \n\
-   background: linear-gradient(90deg, gray, gray)               \n\
-   border-radius: 5px                 \n\
-   opacity: .8                        \n\
-",
+  style: `                              
+  bottom: 10px                        
+  right: 30px                         
+  left: 29.5% 
+  font-family: -apple-system          
+  font-size: 13px                     
+  font-weight: 500                    
+  color: #fff                         
+                                      
+  .cal-container                      
+    border-radius: 10px               
+    background: rgba(#000, 0)         
+    padding: 0px                      
+                                      
+  .title                              
+    color: rgba(#fff, .3)             
+    font-size: 20px                   
+    font-weight: 500                  
+    padding-bottom: 14px              
+    text-transform uppercase          
+    text-align: right				  
+                                      
+  table                               
+    border-collapse: collapse         
+    table-layout: fixed 			  
+    width: 100% 					  
+                                      
+  td                                  
+    text-align: center                
+                                      
+  .weekday td                         
+    padding-top: 6px                  
+    padding-bottom: 6px				  
+                                      
+  .date td                            
+    padding-top: 6px                  
+    padding-bottom: 6px               
+                                      
+  .today, .off-today                  
+    background: rgba(#fff, 0.2)       
+                                      
+  .weekday .today,                    
+  .weekday .off-today                 
+    border-radius: 3px 3px 0 0        
+    padding-bottom: 6px 			  
+                                      
+  .date .today,                       
+  .date .off-today                    
+    border-radius: 0 0 3px 3px        
+    padding-top: 6px 				  
+                                      
+  .midline                            
+    height: 3px                       
+    background: rgba(#fff, .5)        
+                                      
+  .midline .today                     
+    background: rgba(#0bf, .8)        
+                                      
+  .midline .offday                    
+    background: rgba(#f77, .5)        
+                                      
+  .midline .off-today                 
+    background: rgba(#fc3, .8)        
+                                      
+  .offday, .off-today                 
+    color: rgba(#f77, 1)              
+                                      
+  .status_top                         
+    height: 3px                       
+    background: rgba(0, 0, 0, 0)      
+                                      
+  .status_top .open                   
+    background: rgba(#5EEA8E, .8)     
+    border-radius: 5px                
+                                      
+  .status_bottom                      
+    height: 3px                       
+    background: rgba(0, 0, 0, 0)      
+    border-radius: 5px
+    
+  .pulse-anim    
+    animation:                        
+    pulse 2s alternate infinite
+                                      
+  .First                              
+   background: linear-gradient(90deg, transparent, transparent 50%, white)  
+   border-radius: 5px                 
+                                      
+  .Full                               
+   background: linear-gradient(90deg, white, white)             
+   border-radius: 5px                 
+                                      
+  .Third                              
+   background: linear-gradient(-90deg, transparent, transparent 50%, white) 
+   border-radius: 5px                 
+                                      
+  .New                                
+   background: linear-gradient(90deg, gray, gray)               
+   border-radius: 5px                 
+   opacity: .8
 
-    update: function (dull, domEl) {
-        // var date = output.split("\n"), firstWeekDay = date[0], lastDate = date[1], today = date[2], m = date[3]-1, y = date[4];
+  .loader
+   font-size: 20px;
+   color: #eceff1;              
+`,
 
-        // // DON'T MANUPULATE DOM IF NOT NEEDED
-        // if(this.displayedDate != null && this.displayedDate == output) return;
-        // else this.displayedDate = output;
-        
-        var command = `curl -s 'https://clearoutside.com/forecast/${this._["lat"]}/${this._["long"]}?view=midnight' 'https://www.timeanddate.com/moon/${this._["country"]}/${this._["city"]}'`
+  afterRender: function (domEl) {
+    var date = new Date(),
+      y = date.getFullYear(),
+      m = date.getMonth(),
+      today = date.getDate();
 
-        this.run(command, (err, output) => {
+    var newDate = [today, m, y].join("/");
+    if (this.displayedDate != null && this.displayedDate == newDate) return;
+    else this.displayedDate = newDate;
 
-            var date = new Date(),
-                y = date.getFullYear(),
-                m = date.getMonth(),
-                today = date.getDate();
+    var firstWeekDay = new Date(y, m, 1).getDay();
+    var lastDate = new Date(y, m + 1, 0).getDate();
 
-            // DON'T MANUPULATE DOM IF NOT NEEDED
-            var newDate = [today, m, y].join("/");
-            if (this.displayedDate != null && this.displayedDate == newDate) return;
-            else this.displayedDate = newDate;
+    var weekdays = "",
+      midlines = "",
+      dates = "";
 
-            var firstWeekDay = new Date(y, m, 1).getDay();
-            var lastDate = new Date(y, m + 1, 0).getDate();
+    for (var i = 1, w = firstWeekDay, d = 0; i <= lastDate; i++, w++) {
+      w %= 7;
+      var isToday = (i == today),
+        isOffday = (this.offdayIndices.indexOf(w) != -1);
+      var className = "ordinary";
+      if (isToday && isOffday) className = "off-today";
+      else if (isToday) className = "today";
+      else if (isOffday) className = "offday";
 
-            var htmlOut = $.parseHTML(output);
+      weekdays += "<td class=\"" + className + "\">" + this.dayNames[w] + "</td>";
+      midlines += "<td class=\"" + className + "\"></td>";
+      dates += "<td class=\"" + className + "\">" + i + "</td>";
+    };
 
-            var weekdays = "",
-                midlines = "",
-                dates = "",
-                status_top = "",
-                status_bottom = "";
+    $(domEl).find(".title").html(this.monthNames[m] + " <span style='color:lightgray'>" + y + "</span>");
+    $(domEl).find(".weekday").html(weekdays);
+    $(domEl).find(".midline").html(midlines);
+    $(domEl).find(".date").html(dates);
+  },
 
-            for (var i = 1, w = firstWeekDay, d = 0; i <= lastDate; i++, w++) {
-                w %= 7;
-                var isToday = (i == today),
-                    isOffday = (this.offdayIndices.indexOf(w) != -1);
-                var className = "ordinary";
-                if (isToday && isOffday) className = "off-today";
-                else if (isToday) className = "today";
-                else if (isOffday) className = "offday";
+  update: function (dull, domEl) {
+    var command = `curl -s 'https://clearoutside.com/forecast/${this._["lat"]}/${this._["long"]}?view=midnight' 'https://www.timeanddate.com/moon/${this._["country"]}/${this._["city"]}'`
 
-                var moon = ""; //Time&Date Moon Phases
-                var moon_table = $(htmlOut).find("#tb-7dmn").get(0);
-                var day_array = $(moon_table).find("tbody > tr").get(i - 1);
-                var moon_status = $(day_array).find("img").attr("title");
-                if (moon_status != null) moon = moon_status.substr(0, moon_status.indexOf(" "));
+    this.run(command, (err, output) => {
+      var date = new Date(),
+        y = date.getFullYear(),
+        m = date.getMonth(),
+        today = date.getDate();
 
-                var fS = ""; //Clear Outside Forecast
-                if (i >= today && i < today + 7) {
-                    var query = $(htmlOut).find(".fc_hour_ratings").get(d);
-                    var table = $(query).find("ul").get(0);
-                    $(table).find("li").each(function (a) {
-                        if ($(this).hasClass("fc_good")) fS = "open";
-                    });
-                    d++
-                }
+      var lastDate = new Date(y, m + 1, 0).getDate();
 
-                weekdays += "<td class=\"" + className + "\">" + this.dayNames[w] + "</td>";
-                midlines += "<td class=\"" + className + "\"></td>";
-                dates += "<td class=\"" + className + "\">" + i + "</td>";
-                status_top += "<td class=\"" + fS + "\"></td>";
-                status_bottom += "<td class=\"" + moon + "\"></td>";
-            };
+      var htmlOut = $.parseHTML(output);
 
-            $(domEl).find(".title").html(this.monthNames[m] + " <span style='color:lightgray'>" + y + "</span>");
-            $(domEl).find(".weekday").html(weekdays);
-            $(domEl).find(".midline").html(midlines);
-            $(domEl).find(".date").html(dates);
-            $(domEl).find(".status_top").html(status_top);
-            $(domEl).find(".status_bottom").html(status_bottom);
-        });
-    }
+      var status_top = "",
+        status_bottom = "";
+
+      for (var i = 1, d = 0; i <= lastDate; i++) {
+        var moon = ""; //Time&Date Moon Phases
+        var moon_table = $(htmlOut).find("#tb-7dmn").get(0);
+        var day_array = $(moon_table).find("tbody > tr").get(i - 1);
+        var moon_status = $(day_array).find("img").attr("title");
+        if (moon_status != null) moon = moon_status.substr(0, moon_status.indexOf(" "));
+
+        var fS = ""; //Clear Outside Forecast
+        if (i >= today && i < today + 7) {
+          var query = $(htmlOut).find(".fc_hour_ratings").get(d);
+          var table = $(query).find("ul").get(0);
+          $(table).find("li").each(function (a) {
+            if ($(this).hasClass("fc_good")) fS = "open";
+          });
+          d++
+        }
+        status_top += "<td class=\"" + fS + "\"></td>";
+        status_bottom += "<td class=\"" + moon + "\"></td>";
+      };
+
+      $(domEl).find(".status_top").html(status_top);
+      $(domEl).find(".status_bottom").html(status_bottom);
+
+      $(domEl).find(".status_top").add($(domEl).find(".status_bottom")).addClass("pulse-anim");
+    });
+  }
