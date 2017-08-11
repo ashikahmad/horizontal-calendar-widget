@@ -6,22 +6,23 @@
 */
 
 _: (() => this.options = {
-    lat: '41.01',
-    long: '29.21',
-    country: 'turkey',
-    city: 'istanbul'
+    enable: true,
+    lat: '21.54,
+    long: '73.66',
+    country: 'usa',
+    city: 'miami'
   })(),
 
-  dayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+  dayNames: ["Sunday", "Monday", "Tueesday", "Wednesday", "Thursday", "Friday", "Saturday"],
   monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
   offdayIndices: [0, 6], // Saturday & Sunday
 
-  refreshFrequency: 10000,
+  refreshFrequency: 1000 * 60 * 60,
   displayedDate: null,
 
   render: function (output) {
     return '<style>@-webkit-keyframes pulse{0%{opacity:0}100%{opacity:1}}</style>' +
-    '<div class="cal-container">' +
+      '<div class="cal-container">' +
       '<div class=\"title\"></div>' +
       '<table>' +
       '<tr class=\"weekday\"></tr>' +
@@ -40,7 +41,8 @@ _: (() => this.options = {
   font-family: -apple-system          
   font-size: 13px                     
   font-weight: 500                    
-  color: #fff                         
+  color: #fff      
+  user-select: none                   
                                       
   .cal-container                      
     border-radius: 10px               
@@ -132,11 +134,7 @@ _: (() => this.options = {
   .New                                
    background: linear-gradient(90deg, gray, gray)               
    border-radius: 5px                 
-   opacity: .8
-
-  .loader
-   font-size: 20px;
-   color: #eceff1;              
+   opacity: .8        
 `,
 
   afterRender: function (domEl) {
@@ -165,7 +163,7 @@ _: (() => this.options = {
       else if (isToday) className = "today";
       else if (isOffday) className = "offday";
 
-      weekdays += "<td class=\"" + className + "\">" + this.dayNames[w] + "</td>";
+      weekdays += "<td class=\"" + className + "\">" + this.dayNames[w].substring(0, 3) + "</td>";
       midlines += "<td class=\"" + className + "\"></td>";
       dates += "<td class=\"" + className + "\">" + i + "</td>";
     };
@@ -179,42 +177,44 @@ _: (() => this.options = {
   update: function (dull, domEl) {
     var command = `curl -s 'https://clearoutside.com/forecast/${this._["lat"]}/${this._["long"]}?view=midnight' 'https://www.timeanddate.com/moon/${this._["country"]}/${this._["city"]}'`
 
-    this.run(command, (err, output) => {
-      var date = new Date(),
-        y = date.getFullYear(),
-        m = date.getMonth(),
-        today = date.getDate();
+    if (this._["enable"]) {
+      this.run(command, (err, output) => {
+        var date = new Date(),
+          y = date.getFullYear(),
+          m = date.getMonth(),
+          today = date.getDate();
 
-      var lastDate = new Date(y, m + 1, 0).getDate();
+        var lastDate = new Date(y, m + 1, 0).getDate();
 
-      var htmlOut = $.parseHTML(output);
+        var htmlOut = $.parseHTML(output);
 
-      var status_top = "",
-        status_bottom = "";
+        var status_top = "",
+          status_bottom = "";
 
-      for (var i = 1, d = 0; i <= lastDate; i++) {
-        var moon = ""; //Time&Date Moon Phases
-        var moon_table = $(htmlOut).find("#tb-7dmn").get(0);
-        var day_array = $(moon_table).find("tbody > tr").get(i - 1);
-        var moon_status = $(day_array).find("img").attr("title");
-        if (moon_status != null) moon = moon_status.substr(0, moon_status.indexOf(" "));
+        for (var i = 1, d = 0; i <= lastDate; i++) {
+          var moon = ""; //Time&Date Moon Phases
+          var moon_table = $(htmlOut).find("#tb-7dmn").get(0);
+          var day_array = $(moon_table).find("tbody > tr").get(i - 1);
+          var moon_status = $(day_array).find("img").attr("title");
+          if (moon_status != null) moon = moon_status.substr(0, moon_status.indexOf(" "));
 
-        var fS = ""; //Clear Outside Forecast
-        if (i >= today && i < today + 7) {
-          var query = $(htmlOut).find(".fc_hour_ratings").get(d);
-          var table = $(query).find("ul").get(0);
-          $(table).find("li").each(function (a) {
-            if ($(this).hasClass("fc_good")) fS = "open";
-          });
-          d++
-        }
-        status_top += "<td class=\"" + fS + "\"></td>";
-        status_bottom += "<td class=\"" + moon + "\"></td>";
-      };
+          var fS = ""; //Clear Outside Forecast
+          if (i >= today && i < today + 7) {
+            var query = $(htmlOut).find(".fc_hour_ratings").get(d);
+            var table = $(query).find("ul").get(0);
+            $(table).find("li").each(function (a) {
+              if ($(this).hasClass("fc_good")) fS = "open";
+            });
+            d++
+          }
+          status_top += "<td class=\"" + fS + "\"></td>";
+          status_bottom += "<td class=\"" + moon + "\"></td>";
+        };
 
-      $(domEl).find(".status_top").html(status_top);
-      $(domEl).find(".status_bottom").html(status_bottom);
+        $(domEl).find(".status_top").html(status_top);
+        $(domEl).find(".status_bottom").html(status_bottom);
 
-      $(domEl).find(".status_top").add($(domEl).find(".status_bottom")).addClass("pulse-anim");
-    });
+        $(domEl).find(".status_top").add($(domEl).find(".status_bottom")).addClass("pulse-anim");
+      });
+    }
   }
