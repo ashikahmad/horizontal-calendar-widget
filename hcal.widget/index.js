@@ -1,17 +1,4 @@
-/* Please check the correct values for your location to ensure you get the most reliable information.
-
-   Go to these pages and confirm values from url
-    - https://clearoutside.com
-    - https://www.timeanddate.com/moon
-*/
-
-_: (() => this.options = {
-    enable: true,
-    lat: '21.54,
-    long: '73.66',
-    country: 'usa',
-    city: 'miami'
-  })(),
+enable_forecast: true,
 
   dayNames: ["Sunday", "Monday", "Tueesday", "Wednesday", "Thursday", "Friday", "Saturday"],
   monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
@@ -55,7 +42,7 @@ _: (() => this.options = {
     font-weight: 500                  
     padding-bottom: 14px              
     text-transform uppercase          
-    text-align: right				  
+    text-align: right
                                       
   table                               
     border-collapse: collapse         
@@ -175,46 +162,54 @@ _: (() => this.options = {
   },
 
   update: function (dull, domEl) {
-    var command = `curl -s 'https://clearoutside.com/forecast/${this._["lat"]}/${this._["long"]}?view=midnight' 'https://www.timeanddate.com/moon/${this._["country"]}/${this._["city"]}'`
+    var that = this;
+    geolocation.getCurrentPosition(function (pos) {
+      var lat = pos.position["coords"]["latitude"].toFixed(2);
+      var long = pos.position["coords"]["longitude"].toFixed(2);
+      var country = pos.address["country"].toLowerCase();
+      var state = pos.address["state"].toLowerCase();
+      var command = `curl -s 'https://clearoutside.com/forecast/${lat}/${long}?view=midnight' 'https://www.timeanddate.com/moon/${country}/${state}'`;
+      console.log(command);
 
-    if (this._["enable"]) {
-      this.run(command, (err, output) => {
-        var date = new Date(),
-          y = date.getFullYear(),
-          m = date.getMonth(),
-          today = date.getDate();
+      if (that.enable_forecast) {
+        that.run(command, (err, output) => {
+          var date = new Date(),
+            y = date.getFullYear(),
+            m = date.getMonth(),
+            today = date.getDate();
 
-        var lastDate = new Date(y, m + 1, 0).getDate();
+          var lastDate = new Date(y, m + 1, 0).getDate();
 
-        var htmlOut = $.parseHTML(output);
+          var htmlOut = $.parseHTML(output);
 
-        var status_top = "",
-          status_bottom = "";
+          var status_top = "",
+            status_bottom = "";
 
-        for (var i = 1, d = 0; i <= lastDate; i++) {
-          var moon = ""; //Time&Date Moon Phases
-          var moon_table = $(htmlOut).find("#tb-7dmn").get(0);
-          var day_array = $(moon_table).find("tbody > tr").get(i - 1);
-          var moon_status = $(day_array).find("img").attr("title");
-          if (moon_status != null) moon = moon_status.substr(0, moon_status.indexOf(" "));
+          for (var i = 1, d = 0; i <= lastDate; i++) {
+            var moon = ""; //Time&Date Moon Phases
+            var moon_table = $(htmlOut).find("#tb-7dmn").get(0);
+            var day_array = $(moon_table).find("tbody > tr").get(i - 1);
+            var moon_status = $(day_array).find("img").attr("title");
+            if (moon_status != null) moon = moon_status.substr(0, moon_status.indexOf(" "));
 
-          var fS = ""; //Clear Outside Forecast
-          if (i >= today && i < today + 7) {
-            var query = $(htmlOut).find(".fc_hour_ratings").get(d);
-            var table = $(query).find("ul").get(0);
-            $(table).find("li").each(function (a) {
-              if ($(this).hasClass("fc_good")) fS = "open";
-            });
-            d++
-          }
-          status_top += "<td class=\"" + fS + "\"></td>";
-          status_bottom += "<td class=\"" + moon + "\"></td>";
-        };
+            var fS = ""; //Clear Outside Forecast
+            if (i >= today && i < today + 7) {
+              var query = $(htmlOut).find(".fc_hour_ratings").get(d);
+              var table = $(query).find("ul").get(0);
+              $(table).find("li").each(function (a) {
+                if ($(this).hasClass("fc_good")) fS = "open";
+              });
+              d++
+            }
+            status_top += "<td class=\"" + fS + "\"></td>";
+            status_bottom += "<td class=\"" + moon + "\"></td>";
+          };
 
-        $(domEl).find(".status_top").html(status_top);
-        $(domEl).find(".status_bottom").html(status_bottom);
+          $(domEl).find(".status_top").html(status_top);
+          $(domEl).find(".status_bottom").html(status_bottom);
 
-        $(domEl).find(".status_top").add($(domEl).find(".status_bottom")).addClass("pulse-anim");
-      });
-    }
+          $(domEl).find(".status_top").add($(domEl).find(".status_bottom")).addClass("pulse-anim");
+        });
+      }
+    });
   }
